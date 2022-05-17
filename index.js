@@ -17,11 +17,13 @@ const alertLocations = [
 	}
 ]
 
-wss.on('connection', (socket) => {	
+wss.on('connection', (socket) => {
+
 	socket.send(JSON.stringify(alertLocations));
 
 	socket.on('message', (msg) => {
-        console.log('received: ' + msg);
+		console.log('received: ' + msg);
+		if (msg === '__ping__') socket.send('__pong__');
     })
 
 	emitter.on('alertUpdate', () => {
