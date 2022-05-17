@@ -22,8 +22,8 @@ wss.on('connection', (socket) => {
 	socket.send(JSON.stringify(alertLocations));
 
 	socket.on('message', (msg) => {
-		console.log('received: ' + msg);
-		if (msg === '__ping__') socket.send('__pong__');
+		console.log('received from client: ' + msg)
+		if (msg == '__ping__') socket.send('__pong__');
     })
 
 	emitter.on('alertUpdate', () => {
