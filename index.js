@@ -9,11 +9,10 @@ const emitter = new events.EventEmitter();
 
 const alertLocations = [
 	{
-		dangerLevel: 'low',
+		dangerLevel: 'MEDIUM',
 		title: 'Odessa',
-		date: '16.05.2022',
-		dateFrom: '16.05.2022',
-		dateTo: '16.05.2022'
+		dateFrom: '2022-05-18T07:00:00.000Z',
+		dateTo: '2022-05-18T07:30:00.000Z'
 	}
 ]
 
@@ -46,13 +45,7 @@ app.get('/api/alertLocations', (req, res) => {
 
 app.post('/api/enableAlert', (req, res)=>{
 	try {
-		alertLocations.push({
-			dangerLevel: req.body.dangerLevel,
-			title: req.body.title,
-			date: req.body.date,
-			dateFrom: req.body.dateFrom,
-			dateTo: req.body.dateTo
-		});
+		alertLocations.push(req.body);
 		res.json({index: alertLocations.length-1});
 	} catch (e) { res.sendStatus(400) }
 	console.log('enabled alert for '+ JSON.stringify(alertLocations[alertLocations.length-1]));
@@ -62,6 +55,7 @@ app.post('/api/enableAlert', (req, res)=>{
 app.post('/api/disableAlert', (req, res)=>{
 	try {
 		const ind = parseInt(req.body.index);
+		if (ind >= alertLocations.length) {res.json({message: "No such element"}); return}
 		console.log('disabled alert for '+ JSON.stringify(alertLocations[ind]));
 		alertLocations.splice(ind);
 		res.sendStatus(200);		
