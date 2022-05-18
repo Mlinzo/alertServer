@@ -14,10 +14,23 @@ const alertLocations = [
 		dateFrom: '2022-05-18T07:00:00.000Z',
 		dateTo: '2022-05-18T07:30:00.000Z'
 	}
-]
+];
 
+const sanctuaries = [
+	{
+		destination: 100,
+		number: 50,
+		address: 'просп. Маршала Жукова, 2'
+	}
+];
+
+
+const broadcastMessage = (msg, id) => {
+    wss.clients.forEach( client => {
+        client.send(JSON.stringify(msg));
+    });
+};
 wss.on('connection', (socket) => {
-
 	socket.send(JSON.stringify(alertLocations));
 
 	socket.on('message', (msg) => {
@@ -25,42 +38,57 @@ wss.on('connection', (socket) => {
 		if (msg == '__ping__') socket.send('__pong__');
     })
 
-	emitter.on('alertUpdate', () => {
-		broadcastMessage(alertLocations);
+	emitter.on('update', (arr) => {
+		broadcastMessage(arr);
 	});
-	
 })
 
-const broadcastMessage = (msg, id) => {
-    wss.clients.forEach( client => {
-        client.send(JSON.stringify(msg));
-    });
+app.use(express.json());
+
+const tryAddElement = (arr, req, res) => {
+	try {
+		arr.push(req.body);
+		res.json({index: arr.length-1});
+		return true;
+	} catch (e) { res.sendStatus(400); return false };
 };
 
-app.use(express.json());
+const tryDeleteElement = (arr, req, res) => {
+	try {
+		const ind = parseInt(req.body.index);
+		if (ind >= arr.length) {res.json({message: "No such element"}); return false}
+		arr.splice(ind, ind+1);
+		res.sendStatus(200);
+		return true;	
+	} catch (e) { res.sendStatus(400); return false };
+};
 
 app.get('/api/alertLocations', (req, res) => {
 	res.json({alertLocations});
 });
-
 app.post('/api/enableAlert', (req, res)=>{
-	try {
-		alertLocations.push(req.body);
-		res.json({index: alertLocations.length-1});
-	} catch (e) { res.sendStatus(400) }
-	console.log('enabled alert for '+ JSON.stringify(alertLocations[alertLocations.length-1]));
-	emitter.emit('alertUpdate', alertLocations);
+	const success = tryAddElement(alertLocations, req, res);
+	if (!success) return;
+	emitter.emit('update', alertLocations);
+});
+app.post('/api/disableAlert', (req, res)=>{
+	const success = tryDeleteElement(alertLocations, req, res);
+	if (!success) return;
+	emitter.emit('update', alertLocations);
 });
 
-app.post('/api/disableAlert', (req, res)=>{
-	try {
-		const ind = parseInt(req.body.index);
-		if (ind >= alertLocations.length) {res.json({message: "No such element"}); return}
-		console.log('disabled alert for '+ JSON.stringify(alertLocations[ind]));
-		alertLocations.splice(ind);
-		res.sendStatus(200);		
-	} catch (e) { res.sendStatus(400) };
-	emitter.emit('alertUpdate', alertLocations);
+app.get('/api/sanctuaries', (req, res) => {
+	res.json({sanctuaries});
+});
+app.post('/api/addSanctuary', (req, res)=>{
+	const success = tryAddElement(sanctuaries, req, res);
+	if (!success) return;
+	emitter.emit('update', sanctuaries);
+});
+app.post('/api/removeSanctuary', (req, res)=>{
+	const success = tryDeleteElement(sanctuaries, req, res);
+	if (!success) return;
+	emitter.emit('update', sanctuaries);
 });
 
 app.get('*', (req, res) => {
