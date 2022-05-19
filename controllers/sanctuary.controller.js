@@ -1,28 +1,33 @@
-import utils from '../utils.js';
-const { emitter, sanctuaries, tryCatch, addElement, deleteElement} = utils;
+import sanctuaryLogic from '../logic/sanctuary.logic.js';
+import controllerUtils from '../utils/controller.utils.js';
+const { tryCatchResponce} = controllerUtils;
+const { getSanctuaries, insertSanctuary, deleteSanctuary } = sanctuaryLogic;
 
 const sanctuaryController = {
-    getSanctuaries: (req, res) => {
-        tryCatch(res, () => res.json({sanctuaries}));
+    getSanctuaries: (_, res) => {
+        tryCatchResponce(res, () => {
+            getSanctuaries().then( ({ errorMsg, sanctuaries }) => {
+                if (errorMsg) return res.json({errorMsg});
+                res.json({sanctuaries});    
+            });
+        });
     },
 
     addSanctuary: (req, res) => {
-        tryCatch(res, () => {
-            const {errorMsg, index} = addElement(sanctuaries, req.body);
-            if (errorMsg) { res.json({errorMsg}); return };
-            res.json({index});
-            emitter.emit('update', sanctuaries);
+        tryCatchResponce(res, () => {
+            insertSanctuary(req.body).then( ({errorMsg, id}) => {
+                if (errorMsg) return res.json({errorMsg});
+                res.json({id});
+            });
         });
     },
 
     removeSanctuary: (req, res) => {
-        tryCatch(res, () => {
-            const ind = parseInt(req.body.index);
-            if (isNaN(ind)) res.json({message: 'Invalid index'});
-            const {errorMsg} = deleteElement(sanctuaries, ind);
-            if (errorMsg) { res.json({errorMsg}); return };
-            res.sendStatus(200);
-            emitter.emit('update', sanctuaries);
+        tryCatchResponce(res, () => {
+            deleteSanctuary(req.body).then( ({errorMsg}) => {
+                if (errorMsg) return res.json({errorMsg});
+                res.sendStatus(200);
+            });
         });
     }
 };

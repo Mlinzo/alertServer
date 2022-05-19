@@ -1,14 +1,12 @@
-import { json } from 'express';
-import utils from './utils.js';
+import Express, { json } from 'express';
+import * as http from 'http';
 import alertRouter from './routes/alert.routes.js';
 import sanctuaryRouter from './routes/sanctuary.routes.js';
 import otherRouter from './routes/other.routes.js';
-import configureWSS from './websocket.js';
 
-const { app, server } = utils;
 const PORT = process.env.PORT ?? 5000;
-
-configureWSS();
+const app = Express();
+const server = http.createServer(app);
 
 app.use(json());
 

@@ -1,8 +1,8 @@
-import utils from '../utils.js';
-const { tryCatch } = utils;
+import controllerUtils from "../utils/controller.utils.js";
+const { tryCatchResponce } = controllerUtils;
 
 const otherController = {
-    notFound: (req, res) => tryCatch(res, () => res.sendStatus(404))
+    notFound: (_, res) => tryCatchResponce(res, () => res.sendStatus(404))
 };
 
 export default otherController;

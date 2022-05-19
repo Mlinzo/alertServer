@@ -1,28 +1,33 @@
-import utils from '../utils.js';
-const {emitter, alertLocations, tryCatch,  addElement, deleteElement} = utils;
+import alertLogic from '../logic/alert.logic.js'
+import controllerUtils from '../utils/controller.utils.js';
+const {tryCatchResponce} = controllerUtils;
+const {insertAlert, deleteAlert, getAlerts} = alertLogic;
 
 const alertController = {
-    getAlerts: (req, res) => {
-        tryCatch(res, () => res.json({alertLocations}));
+    getAlerts: (_, res) => {
+        tryCatchResponce( res, () => {
+            getAlerts().then( ({ errorMsg, alertLocations }) => {
+                if (errorMsg) return res.json({errorMsg});
+                res.json({alertLocations});    
+            });
+        });
     },
 
     addAlert: (req, res) => {
-        tryCatch(res, () => {
-            const {errorMsg, index} = addElement(alertLocations, req.body);
-            if (errorMsg) { res.json({errorMsg}); return };
-            res.json({index});
-            emitter.emit('update', alertLocations);
+        tryCatchResponce(res, () => {
+            insertAlert(req.body).then( ({errorMsg, id}) => {
+                if (errorMsg) return res.json({errorMsg});
+                res.json({id});
+            });
         });
     },
 
     removeAlert: (req, res) => {
-        tryCatch(res, () => {
-            const ind = parseInt(req.body.index);
-            if (isNaN(ind)) res.json({message: 'Invalid index'});
-            const {errorMsg} = deleteElement(alertLocations, ind);
-            if (errorMsg) { res.json({errorMsg}); return };
-            res.sendStatus(200);
-            emitter.emit('update', alertLocations);
+        tryCatchResponce(res, () => {
+            deleteAlert(req.body).then( ({errorMsg}) => {
+                if (errorMsg) return res.json({errorMsg});
+                res.sendStatus(200);
+            });
         });
     }
 };
