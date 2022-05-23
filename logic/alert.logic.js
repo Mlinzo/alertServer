@@ -1,7 +1,7 @@
 import databaseUtils from '../utils/database.utils.js';
 import otherUtils from '../utils/other.utils.js';
-const { returnQuery, noReturnQuery } = databaseUtils;
-const { isUndefined, translateGetAlerts } = otherUtils;
+const { returnQuery } = databaseUtils;
+const { isUndefined, translateAlerts } = otherUtils;
 
 const alertLogic = {
     getAlerts: async () => {
@@ -9,15 +9,15 @@ const alertLogic = {
         const r = await returnQuery(q, []);
         const { errorMsg, result } = r;
         if (errorMsg) return {errorMsg};
-        const alertLocations = translateGetAlerts(result);
+        const alertLocations = translateAlerts(result);
         return { alertLocations };
     },
 
     insertAlert: async (body) => {
-        const { dangerLevel, title, dateFrom, dateTo } = body;
-        const values = [dangerLevel, title, dateFrom, dateTo];
+        const { dangerLevel, title } = body;
+        const values = [dangerLevel, title];
         if (isUndefined(values)) return {errorMsg: 'Invalid request body'};
-        const q = 'insert into a_locations (a_danger_level, a_title, a_datefrom, a_dateto) values ($1, $2, $3::timestamp, $4::timestamp) returning a_id';
+        const q = 'insert into a_locations (a_danger_level, a_title) values ($1, $2) returning a_id';
         const r = await returnQuery(q, values);
         const { errorMsg, result } = r;
         if (errorMsg) return {errorMsg};
@@ -31,11 +31,28 @@ const alertLogic = {
         if (isUndefined(values)) return {errorMsg: 'Invalid request body'};
         const i = parseInt(id);
         if (isNaN(i) || i < 0) return {errorMsg: 'Invalid index'};
-        const q = 'delete from a_locations where a_id = $1';
-        const r = await noReturnQuery(q, values);
-        const { errorMsg } = r;
+        const q = 'delete from a_locations where a_id = $1 returning *';
+        const r = await returnQuery(q, values);
+        const { errorMsg, result } = r;
         if (errorMsg) return {errorMsg};
-        return { };
+        if (result.length == 0) return {errorMsg: 'No such element'}
+        const alertLocation = translateAlerts(result)[0];
+        return { alertLocation };
+    },
+
+    updateAlert: async (body) => {
+        const { id, dangerLevel } = body;
+        const values = [dangerLevel, id];
+        if (isUndefined(values)) return {errorMsg: 'Invalid request body'};
+        const i = parseInt(id);
+        if (isNaN(i) || i < 0) return {errorMsg: 'Invalid index'};
+        const q = 'update a_locations set a_danger_level = $1 where a_id = $2 returning *';
+        const r = await returnQuery(q, values);
+        const { errorMsg, result } = r;
+        if (errorMsg) return {errorMsg};
+        if (result.length == 0) return {errorMsg: 'No such element'}
+        const alertLocation = translateAlerts(result)[0];
+        return { alertLocation };
     }
 };
 

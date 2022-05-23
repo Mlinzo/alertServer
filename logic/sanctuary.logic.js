@@ -1,7 +1,7 @@
 import databaseUtils from '../utils/database.utils.js'
 import otherUtils from '../utils/other.utils.js';
-const { returnQuery, noReturnQuery} = databaseUtils;
-const { isUndefined, translateGetSanctuaries } = otherUtils;
+const { returnQuery} = databaseUtils;
+const { isUndefined, translateSanctuaries } = otherUtils;
 
 const sanctuaryLogic = {
     getSanctuaries: async () => {
@@ -9,7 +9,7 @@ const sanctuaryLogic = {
         const r = await returnQuery(q, []);
         const { errorMsg, result } = r;
         if (errorMsg) return {errorMsg};
-        const sanctuaries = translateGetSanctuaries(result);
+        const sanctuaries = translateSanctuaries(result);
         return { sanctuaries };
     },
 
@@ -36,12 +36,15 @@ const sanctuaryLogic = {
         if (isUndefined(values)) return {errorMsg: 'Invalid request body'};
         const i = parseInt(id);
         if (isNaN(i) || i < 0) return {errorMsg: 'Invalid index'};
-        const q = 'delete from s_locations where s_id = $1';
-        const r = await noReturnQuery(q, values);
-        const { errorMsg } = r;
+        const q = 'delete from s_locations where s_id = $1 returning *';
+        const r = await returnQuery(q, values);
+        const { errorMsg, result } = r;
         if (errorMsg) return {errorMsg};
-        return {  };
+        if (result.length == 0) return {errorMsg: 'No such element'}
+        const sanctuaryLocation = translateSanctuaries(result)[0];
+        return { sanctuaryLocation };
     }
+    
 };
 
 export default sanctuaryLogic;

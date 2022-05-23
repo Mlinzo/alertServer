@@ -1,7 +1,7 @@
 import alertLogic from '../logic/alert.logic.js'
 import controllerUtils from '../utils/controller.utils.js';
 const {tryCatchResponce} = controllerUtils;
-const {insertAlert, deleteAlert, getAlerts} = alertLogic;
+const {insertAlert, deleteAlert, getAlerts, updateAlert} = alertLogic;
 
 const alertController = {
     getAlerts: (_, res) => {
@@ -24,9 +24,18 @@ const alertController = {
 
     removeAlert: (req, res) => {
         tryCatchResponce(res, () => {
-            deleteAlert(req.body).then( ({errorMsg}) => {
+            deleteAlert(req.body).then( ({errorMsg, alertLocation}) => {
                 if (errorMsg) return res.json({errorMsg});
-                res.sendStatus(200);
+                res.json(alertLocation);
+            });
+        });
+    },
+
+    changeAlert: (req, res) => {
+        tryCatchResponce(res, () => {
+            updateAlert(req.body).then( ({errorMsg, alertLocation}) => {
+                if (errorMsg) return res.json({errorMsg});
+                res.json(alertLocation);
             });
         });
     }

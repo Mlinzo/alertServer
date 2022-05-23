@@ -24,9 +24,9 @@ const sanctuaryController = {
 
     removeSanctuary: (req, res) => {
         tryCatchResponce(res, () => {
-            deleteSanctuary(req.body).then( ({errorMsg}) => {
+            deleteSanctuary(req.body).then( ({errorMsg, sanctuaryLocation}) => {
                 if (errorMsg) return res.json({errorMsg});
-                res.sendStatus(200);
+                res.json(sanctuaryLocation);
             });
         });
     }

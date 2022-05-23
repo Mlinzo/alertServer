@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import Express, { json } from 'express';
 import * as http from 'http';
 import alertRouter from './routes/alert.routes.js';
