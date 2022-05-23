@@ -17,7 +17,7 @@ const sanctuaryController = {
         tryCatchResponce(res, () => {
             insertSanctuary(req.body).then( ({errorMsg, sanctuaryLocation}) => {
                 if (errorMsg) return res.json({errorMsg});
-                res.json({sanctuaryLocation});
+                res.json(sanctuaryLocation);
             });
         });
     },
