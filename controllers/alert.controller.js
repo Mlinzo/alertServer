@@ -17,7 +17,7 @@ const alertController = {
         tryCatchResponce(res, () => {
             insertAlert(req.body).then( ({errorMsg, alertLocation}) => {
                 if (errorMsg) return res.json({errorMsg});
-                res.json({alertLocation});
+                res.json(alertLocation);
             });
         });
     },
