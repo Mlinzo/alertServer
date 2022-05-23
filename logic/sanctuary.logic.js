@@ -22,12 +22,12 @@ const sanctuaryLogic = {
         if (isNaN(dest) || dest <0) return {errorMsg: 'Invalid destination'}; 
         if (isNaN(num) || num < 0) return {errorMsg: 'Invalid number'};
         const goodValues = [dest, num, address];
-        const q = 'insert into s_locations (s_destination, s_number, s_address) values ($1, $2, $3) returning s_id';
+        const q = 'insert into s_locations (s_destination, s_number, s_address) values ($1, $2, $3) returning *';
         const r = await returnQuery(q, goodValues);
         const { errorMsg, result } = r;
         if (errorMsg) return {errorMsg};
-        const id = result[0].s_id;
-        return { id };
+        const sanctuaryLocation = translateSanctuaries(result)[0];
+        return { sanctuaryLocation };
     },
 
     deleteSanctuary: async (body) => {

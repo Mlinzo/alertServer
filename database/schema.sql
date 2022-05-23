@@ -1,6 +1,6 @@
 -- Postgresql
 
-set TIMEZONE='EET'; 
+set TIMEZONE=3; 
 
 create type danger as enum('NO_DATA', 'MEDIUM', 'HIGH', 'NO_DANGER');
 

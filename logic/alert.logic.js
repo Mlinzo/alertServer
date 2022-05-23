@@ -17,12 +17,12 @@ const alertLogic = {
         const { dangerLevel, title } = body;
         const values = [dangerLevel, title];
         if (isUndefined(values)) return {errorMsg: 'Invalid request body'};
-        const q = 'insert into a_locations (a_danger_level, a_title) values ($1, $2) returning a_id';
+        const q = 'insert into a_locations (a_danger_level, a_title) values ($1, $2) returning *';
         const r = await returnQuery(q, values);
         const { errorMsg, result } = r;
         if (errorMsg) return {errorMsg};
-        const id = result[0].a_id;
-        return { id };
+        const alertLocation = translateAlerts(result)[0];
+        return { alertLocation };
     },
 
     deleteAlert: async (body) => {
