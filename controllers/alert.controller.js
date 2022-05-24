@@ -7,7 +7,7 @@ const alertController = {
     getAlerts: (_, res) => {
         tryCatchResponce( res, () => {
             getAlerts().then( ({ errorMsg, alertLocations }) => {
-                if (errorMsg) return res.json({errorMsg});
+                if (errorMsg) return res.status(400).json({errorMsg});;
                 res.json({alertLocations});    
             });
         });
@@ -16,7 +16,7 @@ const alertController = {
     addAlert: (req, res) => {
         tryCatchResponce(res, () => {
             insertAlert(req.body).then( ({errorMsg, alertLocation}) => {
-                if (errorMsg) return res.json({errorMsg});
+                if (errorMsg) return res.status(400).json({errorMsg});
                 res.json(alertLocation);
             });
         });
@@ -25,7 +25,7 @@ const alertController = {
     removeAlert: (req, res) => {
         tryCatchResponce(res, () => {
             deleteAlert(req.body).then( ({errorMsg, alertLocation}) => {
-                if (errorMsg) return res.json({errorMsg});
+                if (errorMsg) return res.status(400).json({errorMsg});
                 res.json(alertLocation);
             });
         });
@@ -34,7 +34,7 @@ const alertController = {
     changeAlert: (req, res) => {
         tryCatchResponce(res, () => {
             updateAlert(req.body).then( ({errorMsg, alertLocation}) => {
-                if (errorMsg) return res.json({errorMsg});
+                if (errorMsg) return res.status(400).json({errorMsg});
                 res.json(alertLocation);
             });
         });

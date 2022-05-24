@@ -1,7 +1,5 @@
 -- Postgresql
 
-set TIMEZONE=3; 
-
 create type danger as enum('NO_DATA', 'MEDIUM', 'HIGH', 'NO_DANGER');
 
 create table a_locations
@@ -19,4 +17,5 @@ create table s_locations
 create table clients
     (c_id varchar(50) primary key,
     fcm_token varchar(200),
-    region varchar(50));
+    region varchar(50),
+    last_seen timestamp not null default current_timestamp);
