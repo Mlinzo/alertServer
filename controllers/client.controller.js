@@ -2,7 +2,7 @@ import controllerUtils from '../utils/controller.utils.js';
 import clientService from '../services/client.service.js';
 
 const {tryCatchResponce} = controllerUtils;
-const {register, getClients, updateClientRegion} = clientService;
+const {register, getClients, updateClientRegion, deleteClient} = clientService;
 
 const clientController = {
     login:  (_, res) => {
@@ -29,6 +29,15 @@ const clientController = {
                 res.json(client);
             });
         });   
+    },
+
+    removeClient: (req, res) => {
+        tryCatchResponce(res, () => {
+            deleteClient(req.body).then( ({errorMsg, client}) => {
+                if (errorMsg) return res.status(400).json({errorMsg});
+                res.json(client);
+            });
+        });
     }
 };
 
