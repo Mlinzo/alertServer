@@ -1,7 +1,7 @@
-import alertLogic from '../logic/alert.logic.js'
+import alertService from '../services/alert.service.js'
 import controllerUtils from '../utils/controller.utils.js';
 const {tryCatchResponce} = controllerUtils;
-const {insertAlert, deleteAlert, getAlerts, updateAlert} = alertLogic;
+const {insertAlert, deleteAlert, getAlerts, updateAlert} = alertService;
 
 const alertController = {
     getAlerts: (_, res) => {

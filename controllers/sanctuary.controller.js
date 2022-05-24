@@ -1,7 +1,7 @@
-import sanctuaryLogic from '../logic/sanctuary.logic.js';
+import sanctuaryService from '../services/sanctuary.service.js';
 import controllerUtils from '../utils/controller.utils.js';
 const { tryCatchResponce} = controllerUtils;
-const { getSanctuaries, insertSanctuary, deleteSanctuary } = sanctuaryLogic;
+const { getSanctuaries, insertSanctuary, deleteSanctuary } = sanctuaryService;
 
 const sanctuaryController = {
     getSanctuaries: (_, res) => {

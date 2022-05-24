@@ -3,7 +3,7 @@ import otherUtils from '../utils/other.utils.js';
 const { returnQuery } = databaseUtils;
 const { isUndefined, translateAlerts } = otherUtils;
 
-const alertLogic = {
+const alertService = {
     getAlerts: async () => {
         const q = 'select * from a_locations';
         const r = await returnQuery(q, []);
@@ -56,4 +56,4 @@ const alertLogic = {
     }
 };
 
-export default alertLogic;
+export default alertService;

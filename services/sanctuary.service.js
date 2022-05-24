@@ -3,7 +3,7 @@ import otherUtils from '../utils/other.utils.js';
 const { returnQuery} = databaseUtils;
 const { isUndefined, translateSanctuaries } = otherUtils;
 
-const sanctuaryLogic = {
+const sanctuaryService = {
     getSanctuaries: async () => {
         const q = 'select * from s_locations';
         const r = await returnQuery(q, []);
@@ -47,4 +47,4 @@ const sanctuaryLogic = {
     
 };
 
-export default sanctuaryLogic;
+export default sanctuaryService;
