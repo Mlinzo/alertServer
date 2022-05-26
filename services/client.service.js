@@ -9,10 +9,12 @@ const {addClient} = clientUtils;
 
 
 const clientService = {
-    register: async () => {
+    register: async (body) => {
+        const { fcmToken } = body;
+        if (isUndefined([fcmToken])) return {errorMsg: 'Invalid requst body'};
         const id = uuidv4();
         const client = { id };
-        await addClient(id);
+        await addClient(id, fcmToken);
         return jwt.sign(client, process.env.ACCESS_TOKEN_SECRET);
     },
 

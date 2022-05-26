@@ -5,9 +5,9 @@ const {tryCatchResponce} = controllerUtils;
 const {register, getClients, updateClientRegion, deleteClient} = clientService;
 
 const clientController = {
-    login:  (_, res) => {
+    login: (req, res) => {
         tryCatchResponce(res, () => {
-            register().then( (token) => {
+            register(req.body).then( (token) => {
                 res.json({token});
             });         
         });
