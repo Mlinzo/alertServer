@@ -1,4 +1,5 @@
 import pg from 'pg';
+import format from 'pg-format';
 
 const databaseUtils = {
     returnQuery: async (query, values) => {
@@ -8,7 +9,7 @@ const databaseUtils = {
         });
         try {
             await client.connect();
-            const resultObj = await client.query(query, values);
+            const resultObj = await client.query(format(query, values, [], (err, res) => console.log(err)));
             const result = resultObj.rows;
             return { result };
         }
