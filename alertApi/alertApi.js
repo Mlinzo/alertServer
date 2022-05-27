@@ -1,11 +1,11 @@
 import alertAPIService from "../services/alertAPI.service.js";
 import databaseUtils from "../utils/database.utils.js";
 const { reqAlerts } = alertAPIService;
-const { returnQuery } = databaseUtils;
+const { f_returnQuery } = databaseUtils;
 
 const getCurrentAlerts = async () => {
     const q = 'select a_title from a_locations'
-    const { result } = await returnQuery(q, []);
+    const { result } = await f_returnQuery(q, []);
     const regions = result.map(({a_title}) => a_title);
     return regions;
 };
@@ -32,14 +32,14 @@ const deleteRegions = async (values) => {
     if (values.length == 0) return;
     const strAlerts = values.map((region) => `'${region}'`).toString();
     const q = 'delete from a_locations where a_title in ('+ strAlerts +')';
-    await returnQuery(q, values);
+    await f_returnQuery(q, values);
 };
 
 const insertRegions = async (fullAlerts) => {
     if (fullAlerts.length == 0) return;
     const values = fullAlerts.map((el) => ['HIGH', el]);
     const q = 'insert into a_locations (a_danger_level, a_title) values %L';
-    await returnQuery(q, values);
+    await f_returnQuery(q, values);
 }
 
 const alertAPILoop = async (interval_ms, callback) => {
