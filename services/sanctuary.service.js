@@ -1,19 +1,17 @@
-import databaseUtils from '../utils/database.utils.js'
-import otherUtils from '../utils/other.utils.js';
-const { returnQuery} = databaseUtils;
-const { isUndefined, translateSanctuaries } = otherUtils;
+const { returnQuery } = require('../utils/database.utils.js');
+const { isUndefined, translateSanctuaries } = require('../utils/other.utils.js');
 
-const sanctuaryService = {
-    getSanctuaries: async () => {
+class SanctuaryService {
+    async getSanctuaries () {
         const q = 'select * from s_locations';
         const r = await returnQuery(q, []);
         const { errorMsg, result } = r;
         if (errorMsg) return {errorMsg};
         const sanctuaries = translateSanctuaries(result);
         return { sanctuaries };
-    },
+    }
 
-    insertSanctuary: async (body) => {
+    async insertSanctuary (body) {
         const { destination, number, address } = body;
         const values = [destination, number, address];
         if (isUndefined(values)) return {errorMsg: 'Invalid request body'};
@@ -28,9 +26,9 @@ const sanctuaryService = {
         if (errorMsg) return {errorMsg};
         const sanctuaryLocation = translateSanctuaries(result)[0];
         return { sanctuaryLocation };
-    },
+    }
 
-    deleteSanctuary: async (body) => {
+    async deleteSanctuary (body) {
         const { id } = body;
         const values = [id];
         if (isUndefined(values)) return {errorMsg: 'Invalid request body'};
@@ -47,4 +45,4 @@ const sanctuaryService = {
     
 };
 
-export default sanctuaryService;
+module.exports = new SanctuaryService();

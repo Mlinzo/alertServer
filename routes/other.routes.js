@@ -1,9 +1,8 @@
-import Router from "express";
-import otherController from '../controllers/other.controller.js';
-const { notFound } = otherController;
+const {Router} = require("express");
+const otherController = require('../controllers/other.controller.js');
 
 const otherRouter = Router();
 
-otherRouter.get('*', notFound);
+otherRouter.get('*', otherController.notFound);
 
-export default otherRouter;
+module.exports = otherRouter;

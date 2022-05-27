@@ -1,11 +1,12 @@
-import 'dotenv/config'
-import Express, { json } from 'express';
-import * as http from 'http';
-import alertRouter from './routes/alert.routes.js';
-import sanctuaryRouter from './routes/sanctuary.routes.js';
-import otherRouter from './routes/other.routes.js';
-import clientRouter from './routes/client.routes.js';
-import alertAPILoop from './alertApi/alertApi.js';
+require('dotenv').config();
+const Express = require('express');
+const {json} = require('express');
+const http = require('http');
+const alertRouter = require('./routes/alert.routes.js');
+const sanctuaryRouter = require('./routes/sanctuary.routes.js');
+const otherRouter = require('./routes/other.routes.js');
+const clientRouter = require('./routes/client.routes.js');
+const alertAPILoop = require('./alertApi/alertApi.js');
 
 const PORT = process.env.PORT ?? 5000;
 const app = Express();

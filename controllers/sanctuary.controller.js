@@ -1,30 +1,28 @@
-import sanctuaryService from '../services/sanctuary.service.js';
-import controllerUtils from '../utils/controller.utils.js';
-const { tryCatchResponce} = controllerUtils;
-const { getSanctuaries, insertSanctuary, deleteSanctuary } = sanctuaryService;
+const sanctuaryService = require('../services/sanctuary.service.js');
+const { tryCatchResponce} = require('../utils/controller.utils.js');
 
-const sanctuaryController = {
-    getSanctuaries: (_, res) => {
+class SanctuaryController {
+    getSanctuaries (_, res)  {
         tryCatchResponce(res, () => {
-            getSanctuaries().then( ({ errorMsg, sanctuaries }) => {
+            sanctuaryService.getSanctuaries().then( ({ errorMsg, sanctuaries }) => {
                 if (errorMsg) return res.json({errorMsg});
                 res.json({sanctuaries});    
             });
         });
-    },
+    }
 
-    addSanctuary: (req, res) => {
+    addSanctuary (req, res)  {
         tryCatchResponce(res, () => {
-            insertSanctuary(req.body).then( ({errorMsg, sanctuaryLocation}) => {
+            sanctuaryService.insertSanctuary(req.body).then( ({errorMsg, sanctuaryLocation}) => {
                 if (errorMsg) return res.json({errorMsg});
                 res.json(sanctuaryLocation);
             });
         });
-    },
+    }
 
-    removeSanctuary: (req, res) => {
+    removeSanctuary (req, res)  {
         tryCatchResponce(res, () => {
-            deleteSanctuary(req.body).then( ({errorMsg, sanctuaryLocation}) => {
+            sanctuaryService.deleteSanctuary(req.body).then( ({errorMsg, sanctuaryLocation}) => {
                 if (errorMsg) return res.json({errorMsg});
                 res.json(sanctuaryLocation);
             });
@@ -32,4 +30,4 @@ const sanctuaryController = {
     }
 };
 
-export default sanctuaryController;
+module.exports = new SanctuaryController();

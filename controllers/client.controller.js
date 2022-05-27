@@ -1,48 +1,45 @@
-import controllerUtils from '../utils/controller.utils.js';
-import clientService from '../services/client.service.js';
+const clientService = require('../services/client.service.js');
+const {tryCatchResponce} = require('../utils/controller.utils.js');
 
-const {tryCatchResponce} = controllerUtils;
-const {register, getClients, updateClientRegion, deleteClient, online} = clientService;
-
-const clientController = {
-    login: (req, res) => {
+class ClientController {
+    login (req, res) {
         tryCatchResponce(res, () => {
-            register(req.body).then( (token) => {
+            clientService.register(req.body).then( (token) => {
                 res.json({token});
             });         
         });
-    },
+    }
 
-    updateOnline: (req, res) => {
+    updateOnline (req, res) {
         tryCatchResponce(res, () => {
-            online(req.client).then( ({errorMsg, client}) => {
+            clientService.online(req.client).then( ({errorMsg, client}) => {
                 if (errorMsg) return res.status(400).json({errorMsg});
                 res.json(client);
             });         
         });
-    },
+    }
     
-    clients: (_, res) => {
+    clients (_, res) {
         tryCatchResponce(res, () => {
-            getClients().then( ({ errorMsg, clients }) => {
+            clientService.getClients().then( ({ errorMsg, clients }) => {
                 if (errorMsg) return res.status(400).json({errorMsg});
                 res.json({clients});    
             });
         });   
-    },
+    }
 
-    updateRegion: (req, res) => {
+    updateRegion (req, res) {
         tryCatchResponce(res, () => {
-            updateClientRegion(req.client, req.body).then(({ errorMsg, client }) => {
+            clientService.updateClientRegion(req.client, req.body).then(({ errorMsg, client }) => {
                 if (errorMsg) return res.status(400).json({errorMsg});
                 res.json(client);
             });
         });   
-    },
+    }
 
-    removeClient: (req, res) => {
+    removeClient (req, res)  {
         tryCatchResponce(res, () => {
-            deleteClient(req.body).then( ({errorMsg, client}) => {
+            clientService.deleteClient(req.body).then( ({errorMsg, client}) => {
                 if (errorMsg) return res.status(400).json({errorMsg});
                 res.json(client);
             });
@@ -50,4 +47,4 @@ const clientController = {
     }
 };
 
-export default clientController;
+module.exports = new ClientController();

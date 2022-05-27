@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const ALERT_API_URL = "http://sirens.in.ua/api/v1/"
+const ALERT_API_URL = "http://sirens.in.ua/api/v1/";
 const mockAlertData = {
     Mykolayiv: null,
     Chernihiv: null,
@@ -29,18 +29,16 @@ const mockAlertData = {
     "Luhans'k": 'full',
     Sevastopol: 'no_data',
     Crimea: 'no_data'
-} 
-
-class AlertAPIService {
-    async reqAlerts () {
-        const responce = await fetch(ALERT_API_URL);
-        const data = await responce.json();
-        return data;
-    }
-
-    changeAlert (key, value)  {
-        mockAlertData[key]= value;
-    }
 };
 
-module.exports = new AlertAPIService();
+const reqAlerts = async () => {
+    const responce = await fetch(ALERT_API_URL);
+    const data = await responce.json();
+    return data;
+};
+
+const changeAlert = (key, value) => {
+    mockAlertData[key]= value;
+};
+
+module.exports = {reqAlerts, changeAlert};

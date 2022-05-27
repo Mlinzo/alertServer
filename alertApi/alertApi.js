@@ -1,7 +1,5 @@
-import alertAPIService from "../services/alertAPI.service.js";
-import databaseUtils from "../utils/database.utils.js";
-const { reqAlerts } = alertAPIService;
-const { f_returnQuery } = databaseUtils;
+const alertAPIService = require("../services/alertAPI.service.js");
+const { f_returnQuery } = require("../utils/database.utils.js");
 
 const getCurrentAlerts = async () => {
     const q = 'select a_title from a_locations'
@@ -52,7 +50,7 @@ const alertAPILoop = async (interval_ms, callback) => {
         console.log('Alerts updated!');
         lastAlerts = {...alerts};
         stringLastAlerts = JSON.stringify(lastAlerts);
-        const dbRegions = await getCurrentAlerts();
+        const dbRegions = await alertAPIService.getCurrentAlerts();
         const toDelete = findToDelete(alerts, dbRegions);
         const toInsert = findToInsert(alerts, dbRegions);
         await deleteRegions(toDelete);
@@ -60,5 +58,4 @@ const alertAPILoop = async (interval_ms, callback) => {
     }, interval_ms);
 };
 
-
-export default alertAPILoop ;
+module.exports = alertAPILoop;

@@ -1,39 +1,37 @@
-import alertService from '../services/alert.service.js'
-import controllerUtils from '../utils/controller.utils.js';
-const {tryCatchResponce} = controllerUtils;
-const {insertAlert, deleteAlert, getAlerts, updateAlert} = alertService;
+const alertService = require('../services/alert.service.js');
+const {tryCatchResponce} = require('../utils/controller.utils.js');
 
-const alertController = {
-    getAlerts: (_, res) => {
+class AlertController{
+    getAlerts(_, res){
         tryCatchResponce( res, () => {
-            getAlerts().then( ({ errorMsg, alertLocations }) => {
+            alertService.getAlerts().then( ({ errorMsg, alertLocations }) => {
                 if (errorMsg) return res.status(400).json({errorMsg});;
                 res.json({alertLocations});    
             });
         });
-    },
+    }
 
-    addAlert: (req, res) => {
+    async addAlert(req, res){
         tryCatchResponce(res, () => {
-            insertAlert(req.body).then( ({errorMsg, alertLocation}) => {
+            alertService.insertAlert(req.body).then( ({errorMsg, alertLocation}) => {
                 if (errorMsg) return res.status(400).json({errorMsg});
                 res.json(alertLocation);
             });
         });
-    },
+    }
 
-    removeAlert: (req, res) => {
+    removeAlert(req, res){
         tryCatchResponce(res, () => {
-            deleteAlert(req.body).then( ({errorMsg, alertLocation}) => {
+            alertService.deleteAlert(req.body).then( ({errorMsg, alertLocation}) => {
                 if (errorMsg) return res.status(400).json({errorMsg});
                 res.json(alertLocation);
             });
         });
-    },
+    }
 
-    changeAlert: (req, res) => {
+    changeAlert(req, res) {
         tryCatchResponce(res, () => {
-            updateAlert(req.body).then( ({errorMsg, alertLocation}) => {
+            alertService.updateAlert(req.body).then( ({errorMsg, alertLocation}) => {
                 if (errorMsg) return res.status(400).json({errorMsg});
                 res.json(alertLocation);
             });
@@ -41,4 +39,4 @@ const alertController = {
     }
 };
 
-export default alertController;
+module.exports = new AlertController();

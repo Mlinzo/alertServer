@@ -1,10 +1,10 @@
-import Router from "express";
-import sanctuaryController from '../controllers/sanctuary.controller.js';
-const { getSanctuaries, addSanctuary, removeSanctuary } = sanctuaryController;
+const {Router} = require("express");
+const sanctuaryController = require('../controllers/sanctuary.controller.js');
+
 const sanctuaryRouter = Router();
 
-sanctuaryRouter.get( '/sanctuaries', getSanctuaries);
-sanctuaryRouter.post( '/addSanctuary', addSanctuary );
-sanctuaryRouter.post( '/removeSanctuary', removeSanctuary );
+sanctuaryRouter.get( '/sanctuaries', sanctuaryController.getSanctuaries);
+sanctuaryRouter.post( '/addSanctuary', sanctuaryController.addSanctuary );
+sanctuaryRouter.post( '/removeSanctuary', sanctuaryController.removeSanctuary );
 
-export default sanctuaryRouter;
+module.exports = sanctuaryRouter;

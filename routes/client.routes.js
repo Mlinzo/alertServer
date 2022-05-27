@@ -1,15 +1,13 @@
-import Router from "express";
-import clientController from '../controllers/client.controller.js';
-import middleware from '../middleware/middleware.js';
-const { login, clients, updateRegion, removeClient, updateOnline } = clientController;
-const { authenticateClient } = middleware;
+const {Router} = require("express");
+const clientController = require('../controllers/client.controller.js');
+const { authenticateClient } = require('../middleware/middleware.js');
 
 const clientRouter = Router();
 
-clientRouter.post( '/login', login );
-clientRouter.get( '/clients', clients);
-clientRouter.post( '/updateRegion', authenticateClient, updateRegion);
-clientRouter.post( '/removeClient', removeClient);
-clientRouter.get( '/online', authenticateClient, updateOnline);
+clientRouter.post( '/login', clientController.login );
+clientRouter.get( '/clients', clientController.clients);
+clientRouter.post( '/updateRegion', authenticateClient, clientController.updateRegion);
+clientRouter.post( '/removeClient', clientController.removeClient);
+clientRouter.get( '/online', authenticateClient, clientController.updateOnline);
 
-export default clientRouter;
+module.exports = clientRouter;

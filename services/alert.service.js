@@ -1,19 +1,17 @@
-import databaseUtils from '../utils/database.utils.js';
-import otherUtils from '../utils/other.utils.js';
-const { returnQuery } = databaseUtils;
-const { isUndefined, translateAlerts } = otherUtils;
+const { returnQuery } = require('../utils/database.utils.js');
+const { isUndefined, translateAlerts } = require('../utils/other.utils.js');
 
-const alertService = {
-    getAlerts: async () => {
+class AlertService {
+    async getAlerts(){
         const q = 'select * from a_locations';
         const r = await returnQuery(q, []);
         const { errorMsg, result } = r;
         if (errorMsg) return {errorMsg};
         const alertLocations = translateAlerts(result);
         return { alertLocations };
-    },
+    }
 
-    insertAlert: async (body) => {
+    async insertAlert(body){
         const { dangerLevel, title } = body;
         const values = [dangerLevel, title];
         if (isUndefined(values)) return {errorMsg: 'Invalid request body'};
@@ -23,9 +21,9 @@ const alertService = {
         if (errorMsg) return {errorMsg};
         const alertLocation = translateAlerts(result)[0];
         return { alertLocation };
-    },
+    }
 
-    deleteAlert: async (body) => {
+    async deleteAlert(body){
         const { id } = body;
         const values = [id];
         if (isUndefined(values)) return {errorMsg: 'Invalid request body'};
@@ -38,9 +36,9 @@ const alertService = {
         if (result.length == 0) return {errorMsg: 'No such element'}
         const alertLocation = translateAlerts(result)[0];
         return { alertLocation };
-    },
+    }
 
-    updateAlert: async (body) => {
+    async updateAlert(body){
         const { id, dangerLevel } = body;
         const values = [dangerLevel, id];
         if (isUndefined(values)) return {errorMsg: 'Invalid request body'};
@@ -56,4 +54,4 @@ const alertService = {
     }
 };
 
-export default alertService;
+module.exports = new AlertService();

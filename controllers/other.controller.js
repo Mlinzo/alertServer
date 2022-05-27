@@ -1,8 +1,9 @@
-import controllerUtils from "../utils/controller.utils.js";
-const { tryCatchResponce } = controllerUtils;
+const { tryCatchResponce } = require("../utils/controller.utils.js");
 
-const otherController = {
-    notFound: (_, res) => tryCatchResponce(res, () => res.sendStatus(404))
+class OtherController {
+    notFound (_, res) {
+        tryCatchResponce(res, () => res.sendStatus(404));
+    }
 };
 
-export default otherController;
+module.exports = new OtherController();
