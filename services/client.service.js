@@ -51,6 +51,19 @@ const clientService = {
         if (result.length == 0) return {errorMsg: 'No such element'}
         const client = result[0];
         return { client };
+    },
+
+    online : async (jwtBody) => {
+        const { id } = jwtBody;
+        const now = new Date();
+        const nowIso = now.toISOString();
+        const values = [nowIso, id];
+        const q = 'update clients set last_seen = $1 where c_id = $2 returning *';
+        const r = await returnQuery(q, values);
+        const { errorMsg, result } = r;
+        if (errorMsg) return {errorMsg};
+        const client = result[0];
+        return { client };
     }
 
 };
