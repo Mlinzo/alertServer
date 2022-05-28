@@ -1,5 +1,6 @@
 const ApiEror = require('../exceptions/api.error.js');
 const { isUndefined } = require('../utils/other.utils.js');
+const jwt = require('jsonwebtoken');
 
 class ValidatorService {
     addAlert (body) {
@@ -69,7 +70,6 @@ class ValidatorService {
         if (isNaN(i) || i < 0) throw ApiEror.BadRequestError('Invalid id field');
         return values;
     }
-
 }
 
 module.exports = new ValidatorService();

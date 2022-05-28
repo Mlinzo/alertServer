@@ -81,6 +81,30 @@ class DatabaseService {
         return result;
     }
 
+    async insertToken (values) {
+        const q = 'insert into r_tokens (c_id, r_token) values ($1, $2)';
+        await returnQuery(q, values);
+    }
+    
+    async findTokenById (values) {
+        const q = 'select r_token from r_tokens where c_id = $1'
+        const result = await returnQuery(q, values);
+        if (result.length == 0) return null;
+        return result[0].r_token;
+    }
+
+    async updateToken (values) {
+        values.push(new Date().toISOString());
+        const q = 'update r_tokens set r_token = $1, last_refresh = $3 where c_id = $2';
+        await returnQuery(q, values);
+    }
+
+    async findToken (values) {
+        const q = 'select r_token from r_tokens where r_token = $1'
+        const result = await returnQuery(q, values);
+        if (result.length == 0) return null;
+        return result[0];
+    }
 }
 
 module.exports = new DatabaseService();

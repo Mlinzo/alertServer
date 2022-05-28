@@ -17,5 +17,13 @@ create table s_locations
 create table clients
     (c_id varchar(50) primary key,
     fcm_token varchar(200),
-    region varchar(50),
-    last_seen timestamp not null default current_timestamp);
+    region varchar(50));
+
+create table r_tokens
+    (c_id varchar(50) primary key,
+    r_token varchar(250),
+    last_refresh timestamp not null default current_timestamp,
+    constraint fk_client
+        foreign key (c_id)
+            references clients(c_id)
+            on delete cascade);

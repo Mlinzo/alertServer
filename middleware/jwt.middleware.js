@@ -1,14 +1,15 @@
 const jwt = require('jsonwebtoken');
+const ApiEror = require('../exceptions/api.error.js');
 
-const authenticateClient = (req, res, next) => {
+const verifyJWT = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    if (token == null) return res.status(401).json({errorMsg: 'Authentication is needed'});
+    if (!token) throw ApiEror.UnathorizedError();
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, client) => {
-        if (err) return res.status(403).json({errorMsg: 'Invalid token'});
+        if (err) throw new ApiEror(403, 'Invalid token');
         req.client = client;
         next();
     });
-};
+}
 
-module.exports = { authenticateClient };
+module.exports = { verifyJWT };

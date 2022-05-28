@@ -35,6 +35,13 @@ class ClientController {
             res.json(client);
         } catch (e) { next(e) }
     }
+
+    async refresh (req, res, next) {
+        try{
+            const tokens = await clientService.refresh(req.body);
+            res.json(tokens);
+        } catch (e) { next(e) }
+    }
 };
 
 module.exports = new ClientController();
