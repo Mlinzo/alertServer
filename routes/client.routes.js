@@ -1,6 +1,6 @@
 const {Router} = require("express");
 const clientController = require('../controllers/client.controller.js');
-const { authenticateClient } = require('../middleware/middleware.js');
+const { authenticateClient } = require('../middleware/jwt.middleware.js');
 
 const clientRouter = Router();
 

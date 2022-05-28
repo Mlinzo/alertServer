@@ -1,32 +1,25 @@
 const sanctuaryService = require('../services/sanctuary.service.js');
-const { tryCatchResponce} = require('../utils/controller.utils.js');
 
 class SanctuaryController {
-    getSanctuaries (_, res)  {
-        tryCatchResponce(res, () => {
-            sanctuaryService.getSanctuaries().then( ({ errorMsg, sanctuaries }) => {
-                if (errorMsg) return res.json({errorMsg});
-                res.json({sanctuaries});    
-            });
-        });
+    async getSanctuaries (req, res, next) {
+        try {
+            const sanctuaries = await sanctuaryService.getSanctuaries();
+            res.json({sanctuaries});
+        } catch (e) { next(e) }
     }
 
-    addSanctuary (req, res)  {
-        tryCatchResponce(res, () => {
-            sanctuaryService.insertSanctuary(req.body).then( ({errorMsg, sanctuaryLocation}) => {
-                if (errorMsg) return res.json({errorMsg});
-                res.json(sanctuaryLocation);
-            });
-        });
+    async addSanctuary (req, res, next) {
+        try {
+            const sanctuary = await sanctuaryService.insertSanctuary(req.body);
+            res.json(sanctuary);
+        } catch (e) { next(e) }
     }
 
-    removeSanctuary (req, res)  {
-        tryCatchResponce(res, () => {
-            sanctuaryService.deleteSanctuary(req.body).then( ({errorMsg, sanctuaryLocation}) => {
-                if (errorMsg) return res.json({errorMsg});
-                res.json(sanctuaryLocation);
-            });
-        });
+    async removeSanctuary (req, res, next) {
+        try {
+            const sanctuary = await sanctuaryService.deleteSanctuary(req.body);
+            res.json(sanctuary);
+        } catch (e) { next(e) }
     }
 };
 

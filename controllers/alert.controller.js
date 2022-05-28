@@ -1,41 +1,32 @@
 const alertService = require('../services/alert.service.js');
-const {tryCatchResponce} = require('../utils/controller.utils.js');
 
 class AlertController{
-    getAlerts(_, res){
-        tryCatchResponce( res, () => {
-            alertService.getAlerts().then( ({ errorMsg, alertLocations }) => {
-                if (errorMsg) return res.status(400).json({errorMsg});;
-                res.json({alertLocations});    
-            });
-        });
+    async getAlerts(req, res, next){
+        try {   
+            const alertLocations = await alertService.getAlerts();
+            res.json({alertLocations});
+        } catch (e) { next(e) }
     }
 
-    async addAlert(req, res){
-        tryCatchResponce(res, () => {
-            alertService.insertAlert(req.body).then( ({errorMsg, alertLocation}) => {
-                if (errorMsg) return res.status(400).json({errorMsg});
-                res.json(alertLocation);
-            });
-        });
+    async addAlert(req, res, next){
+        try {
+            const alertLocation = await alertService.insertAlert(req.body);
+            res.json(alertLocation);
+        } catch (e) { next(e) }
     }
 
-    removeAlert(req, res){
-        tryCatchResponce(res, () => {
-            alertService.deleteAlert(req.body).then( ({errorMsg, alertLocation}) => {
-                if (errorMsg) return res.status(400).json({errorMsg});
-                res.json(alertLocation);
-            });
-        });
+    async removeAlert(req, res, next){
+        try {
+            const alertLocation = await alertService.deleteAlert(req.body);
+            res.json(alertLocation);
+        } catch (e) { next(e) }
     }
 
-    changeAlert(req, res) {
-        tryCatchResponce(res, () => {
-            alertService.updateAlert(req.body).then( ({errorMsg, alertLocation}) => {
-                if (errorMsg) return res.status(400).json({errorMsg});
-                res.json(alertLocation);
-            });
-        });
+    async changeAlert(req, res, next) {
+        try {
+            const alertLocation = await alertService.updateAlert(req.body);
+            res.json(alertLocation);
+        } catch (e) { next(e) }
     }
 };
 

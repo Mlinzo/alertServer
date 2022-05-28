@@ -1,8 +1,8 @@
-const { tryCatchResponce } = require("../utils/controller.utils.js");
-
 class OtherController {
-    notFound (_, res) {
-        tryCatchResponce(res, () => res.sendStatus(404));
+    notFound (req, res, next) {
+        try{
+            res.sendStatus(404);
+        } catch (e) { next(e) }
     }
 };
 

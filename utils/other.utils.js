@@ -1,6 +1,7 @@
+const { v4 } = require('uuid');
+
 const isUndefined = (arr) => {
-    if (arr.includes(undefined)) return true;
-    return false;
+    return arr.includes(undefined);
 }
 
 const translateAlerts = (arr) => {
@@ -31,7 +32,10 @@ const translateAlerts = (arr) => {
     return newArr;
 }
 
+const generateID = () => v4();
+
 module.exports = {
+    generateID,
     isUndefined,
     translateAlerts,
     translateSanctuaries

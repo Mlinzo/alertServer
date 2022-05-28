@@ -7,6 +7,7 @@ const sanctuaryRouter = require('./routes/sanctuary.routes.js');
 const otherRouter = require('./routes/other.routes.js');
 const clientRouter = require('./routes/client.routes.js');
 const alertAPILoop = require('./alertApi/alertApi.js');
+const errorMiddleware = require('./middleware/error.middleware.js');
 
 const PORT = process.env.PORT ?? 5000;
 const app = Express();
@@ -17,8 +18,10 @@ app.use(json());
 app.use('/api', alertRouter);
 app.use('/api', sanctuaryRouter);
 app.use('/api', clientRouter);
+app.use(otherRouter);
 
-app.use('/api', otherRouter);
+app.use(errorMiddleware);
+
 
 server.listen(PORT, () => console.log("server has started on port " + PORT) );
 
