@@ -7,13 +7,6 @@ class ClientController {
             res.json(clientInfo);
         } catch (e) { next(e) }
     }
-
-    async updateOnline (req, res, next) {
-        try {
-            const client = await clientService.online(req.client);
-            res.json(client);
-        } catch (e) { next(e) }
-    }
     
     async clients (req, res, next) {
         try {

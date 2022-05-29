@@ -1,8 +1,8 @@
 const {returnQuery} = require('../utils/database.utils.js');
+const { f_returnQuery } = require("../utils/database.utils.js");
 const ApiEror = require('../exceptions/api.error.js');
 
 class DatabaseService {
-
     async selectAllAlerts () {
         const q = 'select * from a_locations';
         const result = await returnQuery(q, []);
@@ -87,7 +87,7 @@ class DatabaseService {
     }
     
     async findTokenById (values) {
-        const q = 'select r_token from r_tokens where c_id = $1'
+        const q = 'select r_token from r_tokens where c_id = $1';
         const result = await returnQuery(q, values);
         if (result.length == 0) return null;
         return result[0].r_token;
@@ -100,10 +100,35 @@ class DatabaseService {
     }
 
     async findToken (values) {
-        const q = 'select r_token from r_tokens where r_token = $1'
+        const q = 'select r_token from r_tokens where r_token = $1';
         const result = await returnQuery(q, values);
         if (result.length == 0) return null;
         return result[0];
+    }
+
+    async selectFcmByRegion (values) {
+        const q = 'select fcm_token from clients where region = $1';
+        const result = await returnQuery(q, values);
+        if (result.length == 0) return null;
+        return result;
+    }
+
+    async deleteAlertsByRegions (regions) {
+        if (values.length == 0) return;
+        const q = 'delete from a_locations where a_title = any ($1)';
+        await returnQuery(q, [regions]);
+    }
+    
+    async insertAlertsByRegions (fullAlerts) {
+        if (fullAlerts.length == 0) return;
+        const values = fullAlerts.map((el) => ['HIGH', el]);
+        const q = 'insert into a_locations (a_danger_level, a_title) values %L';
+        await f_returnQuery(q, values);
+    }
+
+    async selectFcmForRegions (regions) {
+        const q = 'select fcm_token from clients where region = any ($1)';
+        await returnQuery(q, [regions]);
     }
 }
 
