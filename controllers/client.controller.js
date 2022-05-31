@@ -31,7 +31,7 @@ class ClientController {
 
     async refresh (req, res, next) {
         try{
-            const tokens = await clientService.refresh(req.body);
+            const tokens = await clientService.refresh(req.client);
             res.json(tokens);
         } catch (e) { next(e) }
     }

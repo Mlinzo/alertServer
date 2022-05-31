@@ -12,4 +12,15 @@ const verifyJWT = (req, res, next) => {
     });
 }
 
-module.exports = { verifyJWT };
+const verifyRefreshJWT = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) throw ApiEror.UnathorizedError();
+    jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, client) => {
+        if (err) throw new ApiEror(403, 'Invalid token');
+        req.client = {id: client.id, token};
+        next();
+    });
+}
+
+module.exports = { verifyJWT, verifyRefreshJWT };

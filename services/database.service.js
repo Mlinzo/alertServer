@@ -114,21 +114,22 @@ class DatabaseService {
     }
 
     async deleteAlertsByRegions (regions) {
-        if (values.length == 0) return;
+        if (regions.length == 0) return;
         const q = 'delete from a_locations where a_title = any ($1)';
         await returnQuery(q, [regions]);
     }
     
     async insertAlertsByRegions (fullAlerts) {
         if (fullAlerts.length == 0) return;
-        const values = fullAlerts.map((el) => ['HIGH', el]);
+        const regions = fullAlerts.map((region) => ['HIGH', region]);
         const q = 'insert into a_locations (a_danger_level, a_title) values %L';
-        await f_returnQuery(q, values);
+        await f_returnQuery(q, regions);
     }
 
     async selectFcmForRegions (regions) {
         const q = 'select fcm_token from clients where region = any ($1)';
-        await returnQuery(q, [regions]);
+        const result = await returnQuery(q, [regions]);
+        return result.map((record) => record.fcm_token)
     }
 }
 

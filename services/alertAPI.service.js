@@ -3,41 +3,15 @@ const notificationService = require('./notification.service.js');
 const databaseService = require('./database.service.js');
 
 const ALERT_API_URL = "http://sirens.in.ua/api/v1/"
-const mockAlertData = {
-    Mykolayiv: null,
-    Chernihiv: null,
-    Rivne: null,
-    Chernivtsi: null,
-    "Ivano-Frankivs'k": null,
-    "Khmel'nyts'kyy": null,
-    "L'viv": null,
-    "Ternopil'": null,
-    Transcarpathia: null,
-    Volyn: null,
-    Cherkasy: null,
-    Kirovohrad: null,
-    Kyiv: null,
-    Odessa: null,
-    Vinnytsya: null,
-    Zhytomyr: null,
-    Sumy: null,
-    "Dnipropetrovs'k": null,
-    "Donets'k": null,
-    Kharkiv: 'full',
-    Poltava: null,
-    Zaporizhzhya: null,
-    'Kyiv City': null,
-    Kherson: null,
-    "Luhans'k": 'full',
-    Sevastopol: 'no_data',
-    Crimea: 'no_data'
-} 
 
 class AlertAPIService {
-    async reqAlerts () {
+    async getAlertRegions () {
         const responce = await fetch(ALERT_API_URL);
         const data = await responce.json();
-        return data;
+        const regions = Object.entries(data)
+            .filter(([key, value]) => value === 'full')
+            .map(([key, value]) => key);
+        return regions;
     }
 
     async sendNotifications (canceledFcmTokens, addedFcmTokens) {
@@ -54,10 +28,6 @@ class AlertAPIService {
     async updateAlertsByRegions (canceled, added) {
         await databaseService.deleteAlertsByRegions(canceled);
         await databaseService.insertAlertsByRegions(added);
-    }
-
-    changeAlert (key, value)  {
-        mockAlertData[key]= value;
     }
 };
 

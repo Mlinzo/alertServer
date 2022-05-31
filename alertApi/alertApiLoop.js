@@ -1,24 +1,30 @@
 const alertAPIService = require("../services/alertAPI.service.js");
-const {findCanceled, findAdded} = require('../utils/alertAPI.utils.js');
+const { arrDiff } = require('../utils/other.utils.js');
+const databaseService = require('../services/database.service.js');
 
 const alertAPILoop = async (interval_ms, callback) => {
-    let lastAlerts = await reqAlerts(); 
-    let stringLastAlerts = JSON.stringify(lastAlerts);
+    const dbAlerts = await databaseService.selectAllAlerts();
+    let lastAlertRegions = dbAlerts.map((alert) => alert.a_title)
+    let stringLastAlertRegions = JSON.stringify(lastAlertRegions);
     callback();
+    
     setInterval( async () => {
-        const currentAlerts = await alertAPIService.reqAlerts()
-        if (stringLastAlerts === JSON.stringify(currentAlerts)) return;
-        lastAlerts = {...currentAlerts};
-        stringLastAlerts = JSON.stringify(lastAlerts);
+        let currentAlertRegions = await alertAPIService.getAlertRegions()
+        if (stringLastAlertRegions === JSON.stringify(currentAlertRegions)) return;
 
-        const canceled = findCanceled(currentAlerts, lastAlerts);
-        const added = findAdded(currentAlerts, lastAlerts);
+        const canceled = arrDiff(lastAlertRegions, currentAlertRegions);
+        const added = arrDiff(currentAlertRegions, lastAlertRegions);
+        if (canceled.length != 0) console.log(`Canceled alerts: ${canceled}`)
+        if (added.length != 0) console.log(`Added alerts: ${added}`)
         
-        const [canceledFcmTokens, addedFcmTokens] = alertAPIService.getFcmTokensForRegions(canceled, added);
+        const [canceledFcmTokens, addedFcmTokens] = await alertAPIService.getFcmTokensForRegions(canceled, added);
 
         await alertAPIService.sendNotifications(canceledFcmTokens, addedFcmTokens);
         
         await alertAPIService.updateAlertsByRegions(canceled, added);
+
+        lastAlertRegions = [...currentAlertRegions];
+        stringLastAlertRegions = JSON.stringify(lastAlertRegions);
     }, interval_ms);
 };
 

@@ -32,14 +32,12 @@ class ClientService {
         return client;
     }
 
-    async refresh (body) {
-        const {token} = body;
-        if(!token) throw ApiEror.UnathorizedError();
-        const tokenData = tokenService.validateRefreshToken(token);
+    async refresh (jwtBody) {
+        const {id, token} = jwtBody;
         const tokenFromDb = await databaseService.findToken([token]);
-        if (!tokenData || !tokenFromDb) throw ApiEror.UnathorizedError();
-        const tokens = tokenService.generateTokens({id: tokenData.id});
-        await tokenService.saveToken(tokenData.id, tokens.refreshToken);
+        if (!tokenFromDb) throw ApiEror.UnathorizedError();
+        const tokens = tokenService.generateTokens({id});
+        await tokenService.saveToken(id, tokens.refreshToken);
         return tokens;
     }
 }

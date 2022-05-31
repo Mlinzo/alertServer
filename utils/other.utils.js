@@ -1,5 +1,9 @@
 const { v4 } = require('uuid');
 
+const arrDiff = (arr1, arr2) => {
+    return arr1.filter((el1) => !arr2.includes(el1));
+}
+
 const isUndefined = (arr) => {
     return arr.includes(undefined);
 }
@@ -35,6 +39,7 @@ const translateAlerts = (arr) => {
 const generateID = () => v4();
 
 module.exports = {
+    arrDiff,
     generateID,
     isUndefined,
     translateAlerts,
