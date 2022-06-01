@@ -7,7 +7,7 @@
 url: http://APIBASE/api/login
 method: POST
 body: {
-    "fcmToken": "jaADIASmhafiamsfdiajnalxhidahmdasdahmdsida"
+    "fcmToken": "yourFcmToken"
 }
 ```
 `responce:`
@@ -15,12 +15,12 @@ body: {
 {
 	"clientInfo": {
 		"c_id": "87e5c733-b832-461a-bb6d-9410de81efbd",
-		"fcm_token": "jaADIASmhafiamsfdiajnalxhidahmdasdahmdsida",
+		"fcm_token": "yourFcmToken",
 		"region": null
 	},
 	"tokens": {
-		"accessToken": "hwIjoxNjU0MDMyMjA4fQ.6nAFuIDTWZ6MIq-JjOSmsSa4vK9kVmOYS8ju39IOf-I",
-		"refreshToken": "hwIjoxNjU2NjEzNDA4fQ.t4P8ENYbpRAHoYSTmdFmezP5LA_s9BvWVE0Dh8NQ1Io"
+		"accessToken": "yourAccesToken",
+		"refreshToken": "yourRefreshToken"
 	}
 }
 ```
@@ -30,7 +30,7 @@ body: {
 {
     url: http://APIBASE/api/alertLocations
     method: GET
-    authorization: Bearer "hwIjoxNjU0MDMyMjA4fQ.6nAFuIDTWZ6MIq-JjOSmsSa4vK9kVmOYS8ju39IOf-I"
+    authorization: Bearer "yourAccesToken"
 }
 ```
 `responce:`
@@ -52,7 +52,7 @@ body: {
 {
     url:http://APIBASE/api/updateRegion
     method: POST
-    authorization: Bearer "hwIjoxNjU0MDMyMjA4fQ.6nAFuIDTWZ6MIq-JjOSmsSa4vK9kVmOYS8ju39IOf-I"
+    authorization: Bearer "yourAccesToken"
     body:{
     	"region": "Kyiv"
     }
@@ -62,7 +62,7 @@ body: {
 ```json
 {
 	"c_id": "87e5c733-b832-461a-bb6d-9410de81efbd",
-	"fcm_token": "jaADIASmhafiamsfdiajnalxhidahmdasdahmdsida",
+	"fcm_token": "yourFcmToken",
 	"region": "Kyiv"
 }
 ```
@@ -72,13 +72,13 @@ body: {
 {
     url: http://APIBASE/api/refresh
     method: GET
-    authorization: Bearer "hwIjoxNjU2NjEzNDA4fQ.t4P8ENYbpRAHoYSTmdFmezP5LA_s9BvWVE0Dh8NQ1Io"
+    authorization: Bearer "yourRefreshToken"
 }
 ```
 `responce:`
 ```json
 {
-	"accessToken": "hwIjoxNjU2NjEzNDA4fQ.t468EN1bpRAHoasSmdFmezP5LA_s9BvWVE0Dh1NQ1Io",
-	"refreshToken": "hwIjoxNjU2NjEzNDA4fQ.t468bzN12pRAHAssSmddmezP5LA_s9BvWVE0Dh1NQ1Io"
+	"accessToken": "yourNewAccesToken",
+	"refreshToken": "yourNewRefreshToken"
 }
 ```
