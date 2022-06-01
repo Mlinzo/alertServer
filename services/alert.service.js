@@ -9,7 +9,7 @@ class AlertService {
         return alertLocations;
     }
 
-    async addtAlert(body){
+    async addAlert(body){
         const [dangerLevel, title] = validatorService.addtAlert(body);
         const alert = await databaseService.insertAlert([dangerLevel, title]);
         const alertLocation = translateAlerts(alert)[0];

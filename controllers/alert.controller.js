@@ -10,7 +10,7 @@ class AlertController{
 
     async addAlert(req, res, next){
         try {
-            const alertLocation = await alertService.insertAlert(req.body);
+            const alertLocation = await alertService.addAlert(req.body);
             res.json(alertLocation);
         } catch (e) { next(e) }
     }
