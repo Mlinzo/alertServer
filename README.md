@@ -24,7 +24,7 @@ body: {
 	}
 }
 ```
-### Alert locations 
+### Get alert locations 
 `request:`
 ```javascript
 {
