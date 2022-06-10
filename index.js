@@ -2,8 +2,6 @@ require('dotenv').config();
 const Express = require('express');
 const {json} = require('express');
 const http = require('http');
-const alertRouter = require('./routes/alert.routes.js');
-const sanctuaryRouter = require('./routes/sanctuary.routes.js');
 const otherRouter = require('./routes/other.routes.js');
 const clientRouter = require('./routes/client.routes.js');
 const alertAPILoop = require('./alertApi/alertApiLoop.js');
@@ -15,8 +13,6 @@ const server = http.createServer(app);
 
 app.use(json());
 
-app.use('/api', alertRouter);
-app.use('/api', sanctuaryRouter);
 app.use('/api', clientRouter);
 app.use(otherRouter);
 
