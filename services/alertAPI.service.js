@@ -1,17 +1,33 @@
 const fetch = require('node-fetch');
 const notificationService = require('./notification.service.js');
 const databaseService = require('./database.service.js');
+const { formatDate } = require('../utils/other.utils.js');
+const alertService = require('./alert.service.js');
 
-const ALERT_API_URL = "http://sirens.in.ua/api/v1/"
+const ALERT_API_URL = "https://alarmmap.online/api/history"
 
 class AlertAPIService {
     async getAlertRegions () {
-        const responce = await fetch(ALERT_API_URL);
-        const data = await responce.json();
-        const regions = Object.entries(data)
-            .filter(([key, value]) => value === 'full')
-            .map(([key, value]) => key);
-        return regions;
+        const date = new Date();
+        const formatedDate = formatDate(date);
+        const data = {
+            date: formatedDate
+        }
+
+        const responce = await fetch(ALERT_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const responceData = await responce.json();
+        const currentAlertRegions = responceData
+            .filter( (alert) => alert.end === null )
+            .map((alert) => alert.district);
+
+        return currentAlertRegions;
     }
 
     async sendNotifications (canceledFcmTokens, addedFcmTokens) {
