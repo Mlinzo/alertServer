@@ -15,20 +15,9 @@ class ClientService {
         return {clientInfo, tokens};
     }
 
-    async getClients () {
-        const clients = await databaseService.selectAllClients();
-        return clients;
-    }
-
     async updateClientRegion (jwtBody, body) {
         const [region, id] = validatorService.updateClientRegion(jwtBody, body);
         const client = await databaseService.updateClientRegion([region, id]);
-        return client;
-    }
-
-    async deleteClient (body) {
-        const [id] = validatorService.deleteClient(body);
-        const client = await databaseService.deleteClient([id]);
         return client;
     }
 

@@ -7,26 +7,12 @@ class ClientController {
             res.json(clientInfo);
         } catch (e) { next(e) }
     }
-    
-    async clients (req, res, next) {
-        try {
-            const clients = await clientService.getClients();
-            res.json({clients});
-        } catch (e) { next(e) }   
-    }
 
     async updateRegion (req, res, next) {
         try {
             const client = await clientService.updateClientRegion(req.client, req.body);
             res.json(client);
         } catch (e) { next(e) }   
-    }
-
-    async removeClient (req, res, next)  {
-        try {
-            const client = await clientService.deleteClient(req.body);
-            res.json(client);
-        } catch (e) { next(e) }
     }
 
     async refresh (req, res, next) {

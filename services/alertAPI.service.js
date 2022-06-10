@@ -2,7 +2,6 @@ const fetch = require('node-fetch');
 const notificationService = require('./notification.service.js');
 const databaseService = require('./database.service.js');
 const { formatDate } = require('../utils/other.utils.js');
-const alertService = require('./alert.service.js');
 
 const ALERT_API_URL = "https://alarmmap.online/api/history"
 
@@ -21,7 +20,7 @@ class AlertAPIService {
             },
             body: JSON.stringify(data)
         });
-        
+
         const responceData = await responce.json();
         const currentAlertRegions = responceData
             .filter( (alert) => alert.end === null )
