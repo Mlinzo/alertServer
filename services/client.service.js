@@ -3,6 +3,8 @@ const tokenService = require('./token.service.js')
 const databaseService = require('./database.service.js');
 const validatorService = require('./validator.service.js');
 const ApiEror = require('../exceptions/api.error.js');
+const alertAPIService = require('./alertAPI.service.js');
+const notificationService = require('./notification.service.js');
 
 class ClientService {
     async login (body) {
@@ -23,6 +25,8 @@ class ClientService {
     async updateClientRegion (jwtBody, body) {
         const [region, id] = validatorService.updateClientRegion(jwtBody, body);
         const client = await databaseService.updateClientRegion([region, id]);
+        const alertRegions = await alertAPIService.getAlertRegions();
+        if (alertRegions.includes(client.region)) await notificationService.airAlert([client.fcm_token])
         return client;
     }
 
