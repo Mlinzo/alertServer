@@ -4,7 +4,7 @@
 ### Login
 `request:`
 ```javascript
-url: "http://APIBASE/api/login"
+url: http://APIBASE/api/login
 method: POST
 body: {
     "fcmToken": "yourFcmToken"
@@ -24,11 +24,11 @@ body: {
 	}
 }
 ```
-### Get alert locations 
+### Alert locations 
 `request:`
 ```javascript
 {
-    url: "http://APIBASE/api/alertLocations"
+    url: http://APIBASE/api/alertLocations
     method: GET
     authorization: Bearer "yourAccesToken"
 }
@@ -50,7 +50,7 @@ body: {
 `request:`
 ```javascript
 {
-    url: "http://APIBASE/api/updateRegion"
+    url:http://APIBASE/api/updateRegion
     method: POST
     authorization: Bearer "yourAccesToken"
     body:{
@@ -70,7 +70,7 @@ body: {
 `request:`
 ```javascript
 {
-    url: "http://APIBASE/api/refresh"
+    url: http://APIBASE/api/refresh
     method: GET
     authorization: Bearer "yourRefreshToken"
 }

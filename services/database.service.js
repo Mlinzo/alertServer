@@ -131,6 +131,13 @@ class DatabaseService {
         const result = await returnQuery(q, [regions]);
         return result.map((record) => record.fcm_token)
     }
+
+    async selectClientByFcmToken (token) {
+        const q = 'select * from clients where fcm_token = $1';
+        const result = await returnQuery(q, [token]);
+        if (result.length == 0) return null;
+        return result[0];
+    }
 }
 
 module.exports = new DatabaseService();

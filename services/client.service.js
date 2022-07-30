@@ -10,11 +10,19 @@ class ClientService {
     async login (body) {
         const fcmToken = validatorService.login(body);
         const id = generateID();
-        const clientInfo = await databaseService.insertClient([id, fcmToken]);
-        const client = { id };
-        const tokens = tokenService.generateTokens(client);
-        await tokenService.saveToken(id, tokens.refreshToken);
-        return {clientInfo, tokens};
+        const clientInDb = await databaseService.selectClientByFcmToken(fcmToken);
+        if (clientInDb) {
+            const client = { id: clientInDb.c_id };
+            const tokens = tokenService.generateTokens(client);
+            await tokenService.saveToken(clientInDb.c_id, tokens.refreshToken);
+            return {clientInDb, tokens};
+        } else {
+            const clientInfo = await databaseService.insertClient([id, fcmToken]);
+            const client = { id };
+            const tokens = tokenService.generateTokens(client);
+            await tokenService.saveToken(id, tokens.refreshToken);
+            return {clientInfo, tokens};
+        }
     }
 
     async getClients () {

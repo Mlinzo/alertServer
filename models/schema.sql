@@ -5,7 +5,7 @@ create type danger as enum('NO_DATA', 'MEDIUM', 'HIGH', 'NO_DANGER');
 create table a_locations
     (a_id serial primary key,
     a_danger_level danger not null,
-    a_title varchar(50) not null unique,
+    a_title varchar(200) not null unique,
     a_dateFrom timestamp not null default current_timestamp);
 
 create table s_locations
@@ -17,7 +17,7 @@ create table s_locations
 create table clients
     (c_id varchar(50) primary key,
     fcm_token varchar(200) unique,
-    region varchar(50));
+    region varchar(200));
 
 create table r_tokens
     (c_id varchar(50) primary key,

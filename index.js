@@ -22,7 +22,6 @@ app.use(otherRouter);
 
 app.use(errorMiddleware);
 
-
 server.listen(PORT, () => console.log("server has started on port " + PORT) );
 
 alertAPILoop(10 * 1000, () => console.log('Alert API loop has started'));
